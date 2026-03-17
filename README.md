@@ -61,13 +61,20 @@ console.log("Balance:", balance);
 
 Creates Solana RPC and WebSocket subscription clients that pay per-request via x402.
 
-| Parameter                | Type                                 | Description                                            |
-| ------------------------ | ------------------------------------ | ------------------------------------------------------ |
-| `network`                | `"mainnet" \| "testnet" \| "devnet"` | Solana network to connect to                           |
-| `keyPairFile`            | `string`                             | Path to a Solana keypair JSON file                     |
-| `options.paymentNetwork` | `"mainnet" \| "testnet" \| "devnet"` | Network used for USDC payments. Defaults to `network`. |
+| Parameter                | Type                                            | Description                                                               |
+| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------- |
+| `network`                | `"mainnet" \| "testnet" \| "devnet"`            | Solana network to connect to                                              |
+| `keyPairFile`            | `string`                                        | Path to a Solana keypair JSON file                                        |
+| `options.paymentNetwork` | `"mainnet" \| "testnet" \| "devnet"`            | Network used for USDC payments. Defaults to `network`.                    |
+| `options.paymentModel`   | `"credit-drawdown" \| "pay-per-request"`        | Payment model to use. Defaults to `"credit-drawdown"`.                    |
 
 Returns `{ rpc, rpcSubscriptions }`.
+
+### Payment models
+
+**`credit-drawdown`** (default) — authenticate once via SIWX, buy a bundle of credits with USDC, then consume credits across requests. Mainnet bundles require a minimum of $10 USDC. Devnet bundles are available from $0.01.
+
+**`pay-per-request`** — pay individually for each request with no minimum bundle size. Bypasses SIWX/JWT session management entirely.
 
 **Example: connect to mainnet, pay with devnet USDC**
 
@@ -76,6 +83,16 @@ const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
   "mainnet",
   keyPairFile,
   { paymentNetwork: "devnet" },
+);
+```
+
+**Example: pay per request instead of using a credit bundle**
+
+```typescript
+const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
+  "mainnet",
+  keyPairFile,
+  { paymentModel: "pay-per-request" },
 );
 ```
 
