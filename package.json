@@ -26,7 +26,7 @@
   "author": "Mike MacCana <mikemaccana@quicknode.com>",
   "license": "ISC",
   "dependencies": {
-    "@quicknode/x402": "^0.1.1",
+    "@quicknode/x402": "^0.1.2",
     "@solana/codecs": "^5.5.1",
     "@solana/kit": "^5.5.1"
   },
