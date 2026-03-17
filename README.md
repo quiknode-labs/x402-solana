@@ -77,6 +77,8 @@ const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
 );
 ```
 
+See the [Quicknode x402 guide](https://www.quicknode.com/guides/x402/access-quicknode-endpoints-with-x402-payments) for more information on using X402 with Quicknode.
+
 ## Prerequisites
 
 - A Solana keypair file (e.g. `~/.config/solana/id.json` — the default location used by the Solana CLI)
