@@ -1,0 +1,38 @@
+{
+  "name": "@quicknode/x402-solana",
+  "version": "0.1.0",
+  "description": "Connect to the Solana blockchain using a Solana wallet (no API keys or accounts needed)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --import tsx/esm --test tests/index.test.ts"
+  },
+  "keywords": [
+    "solana",
+    "x402",
+    "quicknode",
+    "rpc"
+  ],
+  "author": "Mike MacCana <mikemaccana@quicknode.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@quicknode/x402": "^0.1.1",
+    "@solana/codecs": "^5.5.1",
+    "@solana/kit": "^5.5.1"
+  },
+  "devDependencies": {
+    "solana-kite": "^3.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.2"
+  }
+}

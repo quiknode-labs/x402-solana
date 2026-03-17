@@ -1,0 +1,103 @@
+# @quicknode/x402-solana
+
+Use [Solana Kit](https://github.com/anza-xyz/kit) with QuickNode's RPC — no account, no API key, no subscription needed. Just a Solana wallet file with some USDC. Payments are made automatically per-request using the [x402 protocol](https://x402.org).
+
+## Installation
+
+```sh
+npm install @quicknode/x402-solana
+```
+
+## Usage
+
+### With Solana Kit
+
+```typescript
+import { createSolanaX402Clients } from "@quicknode/x402-solana";
+import { address } from "@solana/kit";
+import { homedir } from "node:os";
+
+const keyPairFile = `${homedir()}/.config/solana/id.json`;
+
+const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
+  "mainnet",
+  keyPairFile,
+);
+
+const balance = await rpc
+  .getBalance(address("dDCQNnDmNbFVi8cQhKAgXhyhXeJ625tvwsunRyRc7c8"))
+  .send();
+console.log("Balance:", balance.value);
+```
+
+### With Solana Kite
+
+[Solana Kite](https://solanakite.org) wraps Solana Kit with a simpler API:
+
+```typescript
+import { createSolanaX402Clients } from "@quicknode/x402-solana";
+import { connect, loadWalletFromFile } from "solana-kite";
+import { homedir } from "node:os";
+
+const keyPairFile = `${homedir()}/.config/solana/id.json`;
+
+const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
+  "mainnet",
+  keyPairFile,
+);
+
+const connection = connect(rpc, rpcSubscriptions);
+const wallet = await loadWalletFromFile(keyPairFile);
+
+const balance = await connection.getBalance(wallet.address);
+console.log("Balance:", balance);
+```
+
+## API
+
+### `createSolanaX402Clients(network, keyPairFile, options?)`
+
+Creates Solana RPC and WebSocket subscription clients that pay per-request via x402.
+
+| Parameter                | Type                                 | Description                                            |
+| ------------------------ | ------------------------------------ | ------------------------------------------------------ |
+| `network`                | `"mainnet" \| "testnet" \| "devnet"` | Solana network to connect to                           |
+| `keyPairFile`            | `string`                             | Path to a Solana keypair JSON file                     |
+| `options.paymentNetwork` | `"mainnet" \| "testnet" \| "devnet"` | Network used for USDC payments. Defaults to `network`. |
+
+Returns `{ rpc, rpcSubscriptions }`.
+
+**Example: connect to mainnet, pay with devnet USDC**
+
+```typescript
+const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
+  "mainnet",
+  keyPairFile,
+  { paymentNetwork: "devnet" },
+);
+```
+
+## Prerequisites
+
+- A Solana keypair file (e.g. `~/.config/solana/id.json` — the default location used by the Solana CLI)
+- Some USDC in that wallet
+
+No QuickNode account or API key required. For testing, devnet USDC can pay for mainnet requests by passing `{ paymentNetwork: "devnet" }`.
+
+## Tests
+
+```sh
+npm test
+```
+
+Integration tests (live RPC calls) run automatically when `~/.config/solana/id.json` exists with devnet USDC. They are skipped otherwise.
+
+For CI, store your keypair JSON as a `SOLANA_KEYPAIR` repository secret.
+
+## Building
+
+```sh
+npm run build
+```
+
+Compiles TypeScript to `dist/` with declaration files.
