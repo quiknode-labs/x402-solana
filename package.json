@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "publish": "npm run build && npm publish --access public",
     "test": "node --import tsx/esm --test tests/index.test.ts"
   },
   "keywords": [
