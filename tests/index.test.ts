@@ -46,10 +46,10 @@ describe("createSolanaX402Clients", () => {
     });
 
     const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
-      "devnet",
+      "mainnet",
       walletFile,
+      { paymentModel: "credit-drawdown" },
     );
-
     assert.ok(rpc, "rpc client should be defined");
     assert.ok(rpcSubscriptions, "rpcSubscriptions client should be defined");
 
