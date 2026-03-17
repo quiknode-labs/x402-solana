@@ -1,6 +1,6 @@
 {
   "name": "@quicknode/x402-solana",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Connect to the Solana blockchain using a Solana wallet (no API keys or accounts needed)",
   "type": "module",
   "exports": {
@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "publish": "npm run build && npm publish --access public",
+    "release": "npm run build && npm publish --access public",
     "test": "node --import tsx/esm --test tests/index.test.ts"
   },
   "keywords": [
