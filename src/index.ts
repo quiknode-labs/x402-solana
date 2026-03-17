@@ -43,19 +43,37 @@ const loadPrivateKeyAndConvertToBase58 = async (
   return { svmPrivateKey, address };
 };
 
+// Two payment models are supported:
+//
+// - "credit-drawdown" (default): authenticate once via SIWX, buy a bundle of
+//   credits with USDC, then consume credits across requests. Mainnet bundles
+//   require a minimum of $10 USDC. Devnet bundles are available from $0.01.
+//
+// - "pay-per-request": pay individually for each request with no minimum
+//   bundle size. Bypasses SIWX/JWT session management entirely.
+type PaymentModel = "credit-drawdown" | "pay-per-request";
+
 export const createSolanaX402Clients = async (
   network: keyof typeof NETWORKS,
   keyPairFile: string,
-  { paymentNetwork = network }: { paymentNetwork?: keyof typeof NETWORKS } = {},
+  {
+    paymentNetwork = network,
+    paymentModel = "credit-drawdown",
+  }: {
+    paymentNetwork?: keyof typeof NETWORKS;
+    paymentModel?: PaymentModel;
+  } = {},
 ) => {
   const { rpcUrl, wsUrl } = NETWORKS[network];
   const { caip2: paymentCaip2 } = NETWORKS[paymentNetwork];
   const { svmPrivateKey } = await loadPrivateKeyAndConvertToBase58(keyPairFile);
+  const isPayPerRequest = paymentModel === "pay-per-request";
   const client = await createQuicknodeX402Client({
     baseUrl: "https://x402.quicknode.com",
     network: paymentCaip2,
     svmPrivateKey,
-    preAuth: true,
+    preAuth: !isPayPerRequest,
+    paymentModel: isPayPerRequest ? "pay-per-request" : undefined,
   });
 
   const sendRpcRequest = async (payload: unknown, signal?: AbortSignal | null) => {
@@ -91,9 +109,9 @@ export const createSolanaX402Clients = async (
   const rpc = createSolanaRpcFromTransport(rpcTransport);
 
   const token = client.getToken();
-  const authenticatedWsUrl = `${wsUrl}?token=${token}`;
+  const wsUrlWithAuth = token ? `${wsUrl}?token=${token}` : wsUrl;
   const channelCreator = createDefaultSolanaRpcSubscriptionsChannelCreator({
-    url: authenticatedWsUrl,
+    url: wsUrlWithAuth,
   });
   const subscriptionsTransport =
     createRpcSubscriptionsTransportFromChannelCreator(channelCreator);
