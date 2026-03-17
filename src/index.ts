@@ -68,16 +68,22 @@ export const createSolanaX402Clients = async (
     return response.json();
   };
 
-  const rpcTransport: RpcTransport = async ({ payload, signal }) => {
-    const result = await sendRpcRequest(payload, signal);
-    // TODO: raised with QuickNode engineering — error.error should be error.message
-    // per JSON-RPC 2.0 spec. Normalize until the server is fixed.
-    if (result?.error && result.error.message === undefined) {
+  // TODO: raised with QuickNode engineering — error should be an object with a message
+  // field per JSON-RPC 2.0 spec. Normalize until the server is fixed.
+  const normalizeResult = (result: any) => {
+    if (typeof result?.error === "string") {
+      result.error = { message: result.error };
+    } else if (result?.error && result.error.message === undefined) {
       result.error.message = result.error.error;
     }
+    return result;
+  };
+
+  const rpcTransport: RpcTransport = async ({ payload, signal }) => {
+    const result = normalizeResult(await sendRpcRequest(payload, signal));
     if (result?.error?.message === "lifetime_limit_reached") {
       await client.authenticate();
-      return sendRpcRequest(payload, signal);
+      return normalizeResult(await sendRpcRequest(payload, signal));
     }
     return result;
   };
