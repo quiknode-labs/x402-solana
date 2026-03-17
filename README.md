@@ -1,5 +1,7 @@
 # @quicknode/x402-solana
 
+[![Test](https://github.com/quiknode-labs/x402-solana/actions/workflows/test.yml/badge.svg)](https://github.com/quiknode-labs/x402-solana/actions/workflows/test.yml)
+
 Use [Solana Kit](https://github.com/anza-xyz/kit) with QuickNode's RPC — no account, no API key, no subscription needed. Just a Solana wallet file with some USDC. Payments are made automatically per-request using the [x402 protocol](https://x402.org).
 
 ## Installation
