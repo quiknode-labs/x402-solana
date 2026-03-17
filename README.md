@@ -72,7 +72,7 @@ Returns `{ rpc, rpcSubscriptions }`.
 
 ### Payment models
 
-**`credit-drawdown`** (default) — authenticate once via SIWX, buy a bundle of credits with USDC, then consume credits across requests. Mainnet bundles require a minimum of $10 USDC. Devnet bundles are available from $0.01.
+**`credit-drawdown`** (default) — authenticate once via SIWX, buy a bundle of credits with USDC, then consume credits across requests. Mainnet bundles require a minimum of $10 USDC in your wallet. Devnet bundles are available from $0.01.
 
 **`pay-per-request`** — pay individually for each request with no minimum bundle size. Bypasses SIWX/JWT session management entirely.
 
@@ -101,7 +101,7 @@ See the [Quicknode x402 guide](https://www.quicknode.com/guides/x402/access-quic
 ## Prerequisites
 
 - A Solana keypair file (e.g. `~/.config/solana/id.json` — the default location used by the Solana CLI)
-- Some USDC in that wallet
+- Some USDC in that wallet (at least $10 USDC on mainnet for the default `credit-drawdown` model; from $0.01 on devnet)
 
 No QuickNode account or API key required. For testing, devnet USDC can pay for mainnet requests by passing `{ paymentNetwork: "devnet" }`.
 
