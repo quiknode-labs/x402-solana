@@ -29,6 +29,11 @@ describe("createSolanaX402Clients", () => {
   test("creates rpc and rpcSubscriptions clients for devnet", async (context) => {
     const resolved = await resolveWalletFile();
     if (!resolved) {
+      if (process.env.CI) {
+        throw new Error(
+          "No wallet available in CI — set the SOLANA_KEYPAIR repository secret",
+        );
+      }
       context.skip(
         "Skipping: no wallet available — set SOLANA_KEYPAIR env var or add ~/.config/solana/id.json",
       );
