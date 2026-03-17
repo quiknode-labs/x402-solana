@@ -58,7 +58,7 @@ export const createSolanaX402Clients = async (
     preAuth: true,
   });
 
-  const rpcTransport: RpcTransport = async ({ payload, signal }) => {
+  const sendRpcRequest = async (payload: unknown, signal?: AbortSignal | null) => {
     const response = await client.fetch(rpcUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -66,6 +66,20 @@ export const createSolanaX402Clients = async (
       signal,
     });
     return response.json();
+  };
+
+  const rpcTransport: RpcTransport = async ({ payload, signal }) => {
+    const result = await sendRpcRequest(payload, signal);
+    // TODO: raised with QuickNode engineering — error.error should be error.message
+    // per JSON-RPC 2.0 spec. Normalize until the server is fixed.
+    if (result?.error && result.error.message === undefined) {
+      result.error.message = result.error.error;
+    }
+    if (result?.error?.message === "lifetime_limit_reached") {
+      await client.authenticate();
+      return sendRpcRequest(payload, signal);
+    }
+    return result;
   };
 
   const rpc = createSolanaRpcFromTransport(rpcTransport);
