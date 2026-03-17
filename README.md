@@ -61,18 +61,16 @@ console.log("Balance:", balance);
 
 Creates Solana RPC and WebSocket subscription clients that pay per-request via x402.
 
-| Parameter                | Type                                            | Description                                                               |
-| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------- |
-| `network`                | `"mainnet" \| "testnet" \| "devnet"`            | Solana network to connect to                                              |
-| `keyPairFile`            | `string`                                        | Path to a Solana keypair JSON file                                        |
-| `options.paymentNetwork` | `"mainnet" \| "testnet" \| "devnet"`            | Network used for USDC payments. Defaults to `network`.                    |
-| `options.paymentModel`   | `"credit-drawdown" \| "pay-per-request"`        | Payment model to use. Defaults to `"credit-drawdown"`.                    |
+- `network` — `"mainnet" | "testnet" | "devnet"` — Solana network to connect to
+- `keyPairFile` — `string` — Path to a Solana keypair JSON file
+- `options.paymentNetwork` — `"mainnet" | "testnet" | "devnet"` — Network used for USDC payments. Defaults to the same network as `network`.
+- `options.paymentModel` — `"credit-drawdown" | "pay-per-request"` — Payment model to use. Defaults to `"credit-drawdown"`.
 
 Returns `{ rpc, rpcSubscriptions }`.
 
 ### Payment models
 
-**`credit-drawdown`** (default) — authenticate once via SIWX, buy a bundle of credits with USDC, then consume credits across requests. Mainnet bundles require a minimum of $10 USDC in your wallet. Devnet bundles are available from $0.01.
+**`credit-drawdown`** (default) — authenticate once via SIWX, buy a bundle of credits with USDC, then consume credits across requests. Mainnet bundles require a minimum of $10 USDC in your wallet. Devnet bundles are available from $0.01. See the [Quicknode x402 guide](https://www.quicknode.com/guides/x402/access-quicknode-endpoints-with-x402-payments) for more details.
 
 **`pay-per-request`** — pay individually for each request with no minimum bundle size. Bypasses SIWX/JWT session management entirely.
 
