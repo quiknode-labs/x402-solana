@@ -1,8 +1,8 @@
 # @quicknode/x402-solana
 
-[![Test](https://img.shields.io/github/actions/workflow/status/quiknode-labs/x402-solana/test.yml?label=tests)](https://github.com/quiknode-labs/x402-solana/actions/workflows/test.yml)
+[![Test](https://img.shields.io/github/actions/workflow/status/quiknode-labs/x402-solana/test.yml?branch=master&label=tests)](https://github.com/quiknode-labs/x402-solana/actions/workflows/test.yml)
 
-Use [Solana Kit](https://github.com/anza-xyz/kit) with QuickNode's RPC — no account, no API key, no subscription needed. Just a Solana wallet file with some USDC. Payments are made automatically per-request using the [x402 protocol](https://x402.org).
+Use [Solana Kit](https://github.com/anza-xyz/kit) with Quicknode's RPC — no account, no API key, no subscription needed. Just a Solana wallet file (like `id.json`) with some USDC. Payments are made as needed from the account using the [x402 protocol](https://x402.org).
 
 ## Installation
 
@@ -25,7 +25,9 @@ const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
   "mainnet",
   keyPairFile,
 );
+// That's it! Tat's all you need to start making transactions with your AI agents!
 
+// Let's make a sample RPC call to test our connection!
 const balance = await rpc
   .getBalance(address("dDCQNnDmNbFVi8cQhKAgXhyhXeJ625tvwsunRyRc7c8"))
   .send();
@@ -47,8 +49,10 @@ const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
   "mainnet",
   keyPairFile,
 );
-
 const connection = connect(rpc, rpcSubscriptions);
+// We have our Kite connection object and can access any of Kite's helper functions.
+
+// For example, to quickly get the balance:
 const wallet = await loadWalletFromFile(keyPairFile);
 
 const balance = await connection.getBalance(wallet.address);
@@ -101,7 +105,7 @@ See the [Quicknode x402 guide](https://www.quicknode.com/guides/x402/access-quic
 - A Solana keypair file (e.g. `~/.config/solana/id.json` — the default location used by the Solana CLI)
 - Some USDC in that wallet (at least $10 USDC on mainnet for the default `credit-drawdown` model; from $0.01 on devnet)
 
-No QuickNode account or API key required. For testing, devnet USDC can pay for mainnet requests by passing `{ paymentNetwork: "devnet" }`.
+No Quicknode account or API key required. For testing, devnet USDC can pay for mainnet requests by passing `{ paymentNetwork: "devnet" }`.
 
 ## Tests
 

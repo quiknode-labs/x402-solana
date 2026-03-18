@@ -76,7 +76,10 @@ export const createSolanaX402Clients = async (
     paymentModel: isPayPerRequest ? "pay-per-request" : undefined,
   });
 
-  const sendRpcRequest = async (payload: unknown, signal?: AbortSignal | null) => {
+  const sendRpcRequest = async (
+    payload: unknown,
+    signal?: AbortSignal | null,
+  ) => {
     const response = await client.fetch(rpcUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -86,7 +89,7 @@ export const createSolanaX402Clients = async (
     return response.json();
   };
 
-  // TODO: raised with QuickNode engineering — error should be an object with a message
+  // TODO: raised with Quicknode engineering — error should be an object with a message
   // field per JSON-RPC 2.0 spec. Normalize until the server is fixed.
   const normalizeResult = (result: any) => {
     if (typeof result?.error === "string") {
