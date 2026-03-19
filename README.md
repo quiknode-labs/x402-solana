@@ -25,7 +25,7 @@ const { rpc, rpcSubscriptions } = await createSolanaX402Clients(
   "mainnet",
   keyPairFile,
 );
-// That's it! Tat's all you need to start making transactions with your AI agents!
+// That's it! That's all you need to start making transactions with your AI agents!
 
 // Let's make a sample RPC call to test our connection!
 const balance = await rpc
